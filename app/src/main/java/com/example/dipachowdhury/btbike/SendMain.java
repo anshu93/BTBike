@@ -35,7 +35,6 @@ public class SendMain extends ActionBarActivity {
 
     private BluetoothAdapter btAdapter;
     private BluetoothSocket btSocket;
-    private OutputStream outStream;
 
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -57,12 +56,11 @@ public class SendMain extends ActionBarActivity {
                 if (msg.what == handlerState) {										//if message is what we want
                     String readMessage = (String) msg.obj;                                                                // msg.arg1 = bytes from connect thread
                     recDataString.append(readMessage);      								//keep appending to string until ~
-                    int endOfLineIndex = recDataString.indexOf("~");                    // determine the end-of-line
+                    int endOfLineIndex = recDataString.indexOf("\n");                    // determine the end-of-line
                     if (endOfLineIndex > 0) {                                           // make sure there data before ~
                         String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
-                        rec_data.setText("Data Received = " + dataInPrint);
+                        rec_data.setText(dataInPrint);
                         recDataString.delete(0, recDataString.length()); 					//clear all string data
-                        dataInPrint = " ";
                     }
                 }
             }

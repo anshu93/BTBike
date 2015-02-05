@@ -40,9 +40,6 @@ public class MainActivity extends Activity {
 
     private void initialize(){
         text_conn_status = (TextView) findViewById(R.id.connecting);
-        //text_conn_status.setTextSize(40);
-
-
 
         paired_list_adapter = new ArrayAdapter<String>(this, R.layout.device_name);     // Initialize the adapter for the paired device list
         paired_list = (ListView) findViewById(R.id.paired_devices);
@@ -57,7 +54,6 @@ public class MainActivity extends Activity {
                 Intent SendActivity = new Intent(MainActivity.this, SendMain.class);
                 SendActivity.putExtra(PAIRED_DEVICE_ADDR, addr);
                 startActivity(SendActivity);
-                //text_conn_status.setText("Failed to connect with " + name.substring(0,name.length()-17));
             }
         });
     }
@@ -96,27 +92,4 @@ public class MainActivity extends Activity {
             }
         }
     }
-
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 }

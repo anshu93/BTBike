@@ -24,11 +24,21 @@
         android:imeOptions="actionSend"
         android:singleLine="true" />
 
-    <TextView android:text="Received data:"
+    <TextView android:text="Current RPM: "
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/send_text"
-        android:id="@+id/rec_data"/>
+        android:id="@+id/rec_data"
+        android:paddingTop="@dimen/abc_action_bar_default_height_material"
+        android:textSize="40dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Max RPM: "
+        android:layout_below="@+id/rec_data"
+        android:paddingTop="@dimen/abc_action_bar_default_height_material"
+        android:textSize="40dp"/>
 
 </RelativeLayout>
 <!-- From: file:/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/src/main/res/layout/activity_send_main.xml -->
