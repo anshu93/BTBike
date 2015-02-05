@@ -9,8 +9,6 @@ import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,8 +17,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 
@@ -35,7 +31,7 @@ public class SendMain extends ActionBarActivity {
 
     TextView info;
     private EditText userText;
-    //TextView rec_data;
+    TextView rec_data;
 
     private BluetoothAdapter btAdapter;
     private BluetoothSocket btSocket;
@@ -56,21 +52,21 @@ public class SendMain extends ActionBarActivity {
 
         checkBluetoothState();
 
-//        BluetoothIn = new Handler(){
-//            public void handleMessage(Message msg){
-//                if (msg.what == handlerState) {										//if message is what we want
-//                    String readMessage = (String) msg.obj;                                                                // msg.arg1 = bytes from connect thread
-//                    recDataString.append(readMessage);      								//keep appending to string until ~
-//                    int endOfLineIndex = recDataString.indexOf("~");                    // determine the end-of-line
-//                    if (endOfLineIndex > 0) {                                           // make sure there data before ~
-//                        String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
-//                        rec_data.setText("Data Received = " + dataInPrint);
-//                        recDataString.delete(0, recDataString.length()); 					//clear all string data
-//                        dataInPrint = " ";
-//                    }
-//                }
-//            }
-//        };
+        BluetoothIn = new Handler(){
+            public void handleMessage(Message msg){
+                if (msg.what == handlerState) {										//if message is what we want
+                    String readMessage = (String) msg.obj;                                                                // msg.arg1 = bytes from connect thread
+                    recDataString.append(readMessage);      								//keep appending to string until ~
+                    int endOfLineIndex = recDataString.indexOf("~");                    // determine the end-of-line
+                    if (endOfLineIndex > 0) {                                           // make sure there data before ~
+                        String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
+                        rec_data.setText("Data Received = " + dataInPrint);
+                        recDataString.delete(0, recDataString.length()); 					//clear all string data
+                        dataInPrint = " ";
+                    }
+                }
+            }
+        };
 
     }
 
@@ -128,7 +124,7 @@ public class SendMain extends ActionBarActivity {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if((keyCode == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN)){
                     mConnectedThread.write(userText.getText().toString());
-                    //Toast.makeText(getBaseContext(), "Sending..", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Message Sent", Toast.LENGTH_SHORT).show();
                     return true;
                 }
 
@@ -141,7 +137,7 @@ public class SendMain extends ActionBarActivity {
         info = (TextView) findViewById(R.id.info_send_text);
         userText = (EditText) findViewById(R.id.send_text);
         btAdapter = BluetoothAdapter.getDefaultAdapter();
-        //rec_data = (TextView) findViewById(R.id.rec_data);
+        rec_data = (TextView) findViewById(R.id.rec_data);
     }
 
     private void checkBluetoothState() {
@@ -168,6 +164,7 @@ public class SendMain extends ActionBarActivity {
 
             try {
                 //Create I/O streams for connection
+                tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) { }
 
@@ -176,22 +173,22 @@ public class SendMain extends ActionBarActivity {
 
         }
 
-//        public void run() {
-//            byte[] buffer = new byte[256];
-//            int bytes;
-//
-//            // Keep looping to listen for received messages
-//            while (true) {
-//                try {
-//                    bytes = mmInStream.read(buffer);        	//read bytes from input buffer
-//                    String readMessage = new String(buffer, 0, bytes);
-//                    // Send the obtained bytes to the UI Activity via handler
-//                    BluetoothIn.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
-//                } catch (IOException e) {
-//                    break;
-//                }
-//            }
-//        }
+        public void run() {
+            byte[] buffer = new byte[256];
+            int bytes;
+
+            // Keep looping to listen for received messages
+            while (true) {
+                try {
+                    bytes = mmInStream.read(buffer);        	//read bytes from input buffer
+                    String readMessage = new String(buffer, 0, bytes);
+                    // Send the obtained bytes to the UI Activity via handler
+                    BluetoothIn.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
+                } catch (IOException e) {
+                    break;
+                }
+            }
+        }
 
         //write method
         public void write(String input) {

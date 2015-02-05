@@ -1,0 +1,5 @@
+/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/build/intermediates/classes/debug
+/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/build/intermediates/pre-dexed/debug/support-annotations-21.0.3-0f5ca1c002e935685bce98c52b8f902d12643ae6.jar
+/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/build/intermediates/pre-dexed/debug/internal_impl-21.0.3-22cf3b6923e7d98722761f772865ff9befca874d.jar
+/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/build/intermediates/pre-dexed/debug/classes-5af856241cd2510f73658b8f0afd22115920b3fc.jar
+/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/build/intermediates/pre-dexed/debug/classes-d96f4b7a2d13e388c5f820591cc42645d6f95477.jar
