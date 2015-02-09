@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,10 +22,11 @@ import java.util.Set;
 
 public class MainActivity extends Activity {
 
-    public static String PAIRED_DEVICE_ADDR;
+    public static String PAIRED_DEVICE_ADDR; // MAC address of device chosen
 
-    TextView text_conn_status;
-    ListView paired_list;
+    TextView text_conn_status;  // Initialize TextView
+    ListView paired_list;   // Initialize ListView
+    Button map;
 
     private BluetoothAdapter btAdapter;                     // BTadapter for connection
     private ArrayAdapter<String> paired_list_adapter;       // Adapter for list of paired devices
@@ -35,11 +37,20 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialize();
-
     }
 
     private void initialize(){
         text_conn_status = (TextView) findViewById(R.id.connecting);
+        map = (Button) findViewById(R.id.bt_Map);
+
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent MapActivity = new Intent(MainActivity.this, MapActivity.class);
+                MapActivity.putExtra("name", "My Location");
+                startActivity(MapActivity);
+            }
+        });
 
         paired_list_adapter = new ArrayAdapter<String>(this, R.layout.device_name);     // Initialize the adapter for the paired device list
         paired_list = (ListView) findViewById(R.id.paired_devices);
@@ -65,7 +76,7 @@ public class MainActivity extends Activity {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // Get the status
 
-        checkBluetoothState();          // Check the status and start throwing exceptions
+        checkBluetoothState();  // Check the status and start throwing exceptions
 
         Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
 
@@ -86,8 +97,8 @@ public class MainActivity extends Activity {
             finish();
         }else{
             if(!btAdapter.isEnabled()){
-//                Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-//                startActivityForResult(enableBT,1);
+                Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBT,1);
                 Toast.makeText(getBaseContext(), "Please turn on Bluetooth", Toast.LENGTH_LONG).show();
             }
         }
