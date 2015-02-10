@@ -60,6 +60,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.example.dipachowdhury.btbike.BTDownload"
+            android:exported="false" />
     </application>
 
 </manifest>

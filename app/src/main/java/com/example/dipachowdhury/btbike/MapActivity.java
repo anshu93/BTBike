@@ -1,6 +1,7 @@
 package com.example.dipachowdhury.btbike;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -12,10 +13,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
+
+    private static final LatLng LOWER_MANHATTAN = new LatLng(40.722543, -73.998585);
+    private static final LatLng TIMES_SQUARE = new LatLng(40.7577, -73.9857);
+    private static final LatLng BROOKLYN_BRIDGE = new LatLng(40.7057, -73.9964);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,12 @@ public class MapActivity extends FragmentActivity {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(10));
         mMap.addMarker(new MarkerOptions().position(coords).title(marker_name));
 
+        addLines();
+    }
+
+    private void addLines(){
+        mMap.addPolyline(new PolylineOptions().add(LOWER_MANHATTAN, TIMES_SQUARE, BROOKLYN_BRIDGE, LOWER_MANHATTAN).width(5).color(Color.BLUE).geodesic(true));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LOWER_MANHATTAN, 10));
     }
 
     /**

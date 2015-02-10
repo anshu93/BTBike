@@ -11,14 +11,6 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="80dp" />
 
-    <!--<Button-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/bt_collectdata"-->
-        <!--android:id="@+id/btCollectData"-->
-        <!--android:layout_below="@+id/btConnect"-->
-        <!--android:layout_centerInParent="true"/>-->
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,6 +26,14 @@
         android:id="@+id/btRideData"
         android:layout_centerInParent="true"
         android:layout_below="@+id/btMap" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvStatus"
+        android:text="Please Connect To Bike..."
+        android:layout_below="@+id/btRideData"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>
 
 

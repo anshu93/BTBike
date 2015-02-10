@@ -39,6 +39,7 @@ public class ConnectActivity extends Activity {
     public Handler BluetoothIn;
     private StringBuilder recDataString = new StringBuilder();
 
+    // Intent IDS that will be returned to the Main Activity
     int CONNECT_SUCCESS = 1;
     int CONNECT_FAILURE = 2;
 
@@ -65,17 +66,26 @@ public class ConnectActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 text_conn_status.setText("Trying to Connect...");
+
+                // Convert the item into a string and use its MAC address
                 String name = ((TextView) view).getText().toString();
                 PAIRED_DEVICE_ADDR = name.substring(name.length() - 17);   // MAC address is last 17 chars of name
-                OpenConnection();
-//                Intent SendActivity = new Intent(ConnectActivity.this, SendMain.class);
-//                SendActivity.putExtra(PAIRED_DEVICE_ADDR, addr);
-//                startActivity(SendActivity);
+                try {
+                    OpenConnection();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    private void OpenConnection() {
+    private void OpenConnection() throws IOException {
+        // Check and close any previous open sockets
+        BluetoothSocket previous = ((GlobalThread) this.getApplication()).getBtSocket();
+        if(previous != null) {
+            previous.close();
+        }
+
         BluetoothDevice receiver = btAdapter.getRemoteDevice(PAIRED_DEVICE_ADDR);
 
 
@@ -96,6 +106,7 @@ public class ConnectActivity extends Activity {
             }
         }
 
+        // This is a handler that the thread would return any failure messages to
         BluetoothIn = new Handler(){
             public void handleMessage(Message msg){
                 if (msg.what == 0) {										//if message is what we want
@@ -113,21 +124,31 @@ public class ConnectActivity extends Activity {
                     int endOfLineIndex = recDataString.indexOf("\n");                    // determine the end-of-line
                     if (endOfLineIndex > 0) {                                           // make sure there data before ~
                         String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
-
                         recDataString.delete(0, recDataString.length()); 					//clear all string data
                     }
                 }
             }
         };
 
+        // Set the global handler
         ((GlobalThread) this.getApplication()).setBluetoothIn(BluetoothIn);
 
         ConnectedThread mConnectedThread = new ConnectedThread(btSocket, BluetoothIn);
         mConnectedThread.start();
+
+        // Set the global thread
         ((GlobalThread) this.getApplication()).setmConnectedThread(mConnectedThread);
-        mConnectedThread.write("t");
+
+        // Write garbage to the Arduino just to check that the connection is good
+        mConnectedThread.write("x");
 
         // If here, the app successfully sent stuff
+
+        // Launch the data gatherer
+        Intent DataIntent = new Intent(ConnectActivity.this, BTDownload.class);
+        ConnectActivity.this.startService(DataIntent);
+
+        // Go back to main screen
         Intent intent = getIntent();
         setResult(CONNECT_SUCCESS, intent);
         finish();

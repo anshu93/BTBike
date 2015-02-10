@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,39 +34,27 @@ public class ConnectedThread extends Thread{
 
     }
 
-    public void run() {
-        byte[] buffer = new byte[2048];
-        int bytes;
-
-        // Keep looping to listen for received messages
-        while (true) {
-            try {
-                bytes = mmInStream.read(buffer);        	//read bytes from input buffer
-                String readMessage = new String(buffer, 0, bytes);
-
-                // Send the obtained bytes to the UI Activity via handler
-                BluetoothIn.obtainMessage(0, bytes, -1, readMessage).sendToTarget();
-            } catch (IOException e) {
-                break;
-            }
-        }
-    }
-
     public String GetData() {
         byte[] buffer = new byte[2048];
         int bytes;
-
+        StringBuilder msg = new StringBuilder();
+        boolean finished = false;
+        this.write("t");
         // Keep looping to listen for received messages
-        while (true) {
+        while (!finished) {
             try {
                 bytes = mmInStream.read(buffer);        	//read bytes from input buffer
                 String readMessage = new String(buffer, 0, bytes);
-                return readMessage;
+                msg.append(readMessage);
+                if(readMessage.contains("!")){
+                    finished = true;
+                }
             } catch (IOException e) {
                 break;
             }
         }
-        return null;
+        Log.d("FINISHED COLLECTING DATA: ", msg.toString());
+        return msg.toString();
     }
 
     //write method
