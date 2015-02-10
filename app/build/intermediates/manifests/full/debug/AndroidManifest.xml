@@ -26,21 +26,17 @@
         android:required="true" />
 
     <application
+        android:name="com.example.dipachowdhury.btbike.GlobalThread"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.example.dipachowdhury.btbike.MainActivity"
+            android:name="com.example.dipachowdhury.btbike.ConnectActivity"
             android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
-            android:name="com.example.dipachowdhury.btbike.SendMain"
+            android:name="com.example.dipachowdhury.btbike.CollectDataActivity"
             android:label="@string/title_activity_send_main" >
         </activity>
 
@@ -54,6 +50,15 @@
         <activity
             android:name="com.example.dipachowdhury.btbike.MapActivity"
             android:label="@string/title_activity_map" >
+        </activity>
+        <activity
+            android:name="com.example.dipachowdhury.btbike.MainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

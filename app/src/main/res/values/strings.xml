@@ -9,5 +9,11 @@
     <string name="type_info">Type the data you would like to send</string>
     <string name="map">Map</string>
     <string name="title_activity_map">Map</string>
+    <string name="bt_map">Display Map</string>
+    <string name="bt_collectdata">Collect Data from Bike</string>
+    <string name="bt_connect">Connect to Bike</string>
+    <string name="bt_metrics">Display Ride Data</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

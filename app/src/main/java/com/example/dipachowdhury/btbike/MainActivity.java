@@ -1,105 +1,91 @@
 package com.example.dipachowdhury.btbike;
 
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
-import android.app.ListActivity;
+
+import java.io.IOException;
 
 
-import java.util.Set;
+public class MainActivity extends ActionBarActivity {
 
+    //Initialize 4 main buttons
+    Button btConnect;
+    Button btCollectData;
+    Button btMap;
+    Button btDisplayData;
 
-public class MainActivity extends Activity {
+    int CONNECT_STATUS = 0;
+    int CONNECT_SUCCESS = 1;
+    int CONNECT_FAILURE = 2;
 
-    public static String PAIRED_DEVICE_ADDR; // MAC address of device chosen
+    int DATA_STATUS = 3;
+    int DATA_SUCCESS = 4;
 
-    TextView text_conn_status;  // Initialize TextView
-    ListView paired_list;   // Initialize ListView
-    Button map;
-
-    private BluetoothAdapter btAdapter;                     // BTadapter for connection
-    private ArrayAdapter<String> paired_list_adapter;       // Adapter for list of paired devices
-
+    BluetoothSocket btSocket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initialize();
     }
 
-    private void initialize(){
-        text_conn_status = (TextView) findViewById(R.id.connecting);
-        map = (Button) findViewById(R.id.bt_Map);
+    private void initialize() {
 
-        map.setOnClickListener(new View.OnClickListener() {
+        btConnect = (Button) findViewById(R.id.btConnect);
+        //btCollectData = (Button) findViewById(R.id.btCollectData);
+        btMap = (Button) findViewById(R.id.btMap);
+        btDisplayData = (Button) findViewById(R.id.btRideData);
+
+        // On click listener for the initial connect button
+        btConnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent MapActivity = new Intent(MainActivity.this, MapActivity.class);
-                MapActivity.putExtra("name", "My Location");
-                startActivity(MapActivity);
+                Intent ConnectIntent = new Intent(MainActivity.this, ConnectActivity.class);
+                startActivityForResult(ConnectIntent, CONNECT_STATUS);
             }
         });
 
-        paired_list_adapter = new ArrayAdapter<String>(this, R.layout.device_name);     // Initialize the adapter for the paired device list
-        paired_list = (ListView) findViewById(R.id.paired_devices);
-        paired_list.setAdapter(paired_list_adapter);                // Pair the device list and the adapter
+//        btCollectData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent CollectDataIntent = new Intent(MainActivity.this, CollectDataActivity.class);
+//                startActivityForResult(CollectDataIntent, DATA_STATUS);
+//            }
+//        });
 
-        paired_list.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                text_conn_status.setText("Trying to Connect...");
-                String name = ((TextView) view).getText().toString();
-                String addr = name.substring(name.length() - 17);   // MAC address is last 17 chars of name
-                Intent SendActivity = new Intent(MainActivity.this, SendMain.class);
-                SendActivity.putExtra(PAIRED_DEVICE_ADDR, addr);
-                startActivity(SendActivity);
-            }
-        });
     }
 
-    public void onResume(){
-        super.onResume();
-
-        paired_list_adapter.clear();
-
-        btAdapter = BluetoothAdapter.getDefaultAdapter();       // Get the status
-
-        checkBluetoothState();  // Check the status and start throwing exceptions
-
-        Set<BluetoothDevice> pairedDevices = btAdapter.getBondedDevices();
-
-        if(pairedDevices.size() > 0){
-            findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);
-            for(BluetoothDevice device : pairedDevices){
-                paired_list_adapter.add(device.getName() + "\n" + device.getAddress());
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CONNECT_STATUS){
+            if(resultCode == CONNECT_SUCCESS){
+                Toast.makeText(getBaseContext(), "Connection Successful", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getBaseContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
             }
-        }else{
-            paired_list_adapter.add("No paired devices found");
+        }else if(requestCode == DATA_STATUS){
+            if(resultCode == DATA_SUCCESS){
+                Toast.makeText(getBaseContext(), "Download Complete", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    private void checkBluetoothState() {
-        btAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(btAdapter == null){
-            Toast.makeText(getBaseContext(), "Device does not have bluetooth", Toast.LENGTH_SHORT).show();
-            finish();
-        }else{
-            if(!btAdapter.isEnabled()){
-                Intent enableBT = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBT,1);
-                Toast.makeText(getBaseContext(), "Please turn on Bluetooth", Toast.LENGTH_LONG).show();
+    public void onPause(){
+        super.onPause();
+        btSocket = ((GlobalThread) this.getApplication()).getBtSocket();
+        if(btSocket != null) {
+            try {
+                btSocket.close();
+            } catch (IOException e) {
+                Toast.makeText(getBaseContext(), "Could not close connection", Toast.LENGTH_SHORT).show();
             }
         }
     }

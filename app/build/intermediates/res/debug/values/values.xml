@@ -207,6 +207,10 @@
     <eat-comment/>
     <string name="action_settings">Settings</string>
     <string name="app_name">BTBike</string>
+    <string name="bt_collectdata">Collect Data from Bike</string>
+    <string name="bt_connect">Connect to Bike</string>
+    <string name="bt_map">Display Map</string>
+    <string name="bt_metrics">Display Ride Data</string>
     <!-- From: file:/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values/common_strings.xml -->
     <eat-comment/>
     <string name="common_android_wear_notification_needs_update_text">An application requires an update to the Android Wear app.</string>
@@ -261,6 +265,7 @@ https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend
     --></string>
     <!-- From: file:/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/src/main/res/values/strings.xml -->
     <eat-comment/>
+    <string name="hello_world">Hello world!</string>
     <string name="info">If no devices are listed please pair your device in Android settings</string>
     <string name="map">Map</string>
     <!-- From: file:/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/res/values/admob_strings.xml -->
@@ -270,6 +275,7 @@ https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend
     <!-- From: file:/Users/DipaChowdhury/AndroidStudioProjects/BTBike/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="title">Select btSerial device from paired device</string>
+    <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_send_main">SendMain</string>
     <string name="type_info">Type the data you would like to send</string>
